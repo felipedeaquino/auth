@@ -1,2 +1,3 @@
 # auth
-Simple user authentication API
+
+Simple user authentication project
