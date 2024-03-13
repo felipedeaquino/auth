@@ -34,6 +34,10 @@
     const password = req.body.password
     const validationPassword = req.body.validationPassword
 
+    if (password !== validationPassword) {
+      res.status(403).send('As senhas devem coincidir.')
+    }
+
     db.push({
       username,
       password
