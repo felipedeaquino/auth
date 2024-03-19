@@ -1,3 +1,6 @@
-const DB = [];
+const DB = [{
+  username: 'test',
+  password: 'batman123'
+}];
 
-module.exports = DB;
+export default DB;

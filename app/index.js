@@ -1,13 +1,13 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const authRoutes = require('./routes/auth');
+import express from 'express';
+import bodyParser from 'body-parser';
+import { usersRoutes } from './routes/users.js';
 
 const app = express()
 const port = process.env.PORT || 3000
 
 app
   .use(bodyParser.json())
-  .use('/auth', authRoutes)
+  .use('/auth', usersRoutes)
 
 app.get('/', (req, res) => {
   res.send('Hello World!')

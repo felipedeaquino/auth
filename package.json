@@ -3,17 +3,18 @@
   "version": "1.0.0",
   "description": "Simple user authentication API",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "start": "node --env-file=.env ./app/index.js",
-    "dev": "nodemon --env-file=.env ./app/index.js",
+    "dev": "node --watch ./app/index.js",
     "lint:check": "prettier --check .",
-    "lint:fix": "prettier --write ."
+    "lint:fix": "prettier --write .",
+    "test": "node --watch ./app/tests/users.test.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "nodemon": "^3.1.0",
     "prettier": "^3.2.5"
   },
   "dependencies": {
