@@ -1,15 +1,19 @@
-import { describe, it } from 'node:test';
-import { generate } from '../models/users.js';
 import assert from 'assert';
-import db from '../database/db.js';
+import { describe, it } from 'node:test';
 
-function testUserExistsError() {
-  const existingUser = { username: 'existingUser', password: 'password' };
-  db.push(existingUser);
+import { UserModel } from '../models/users.js';
 
-  it('should throw an error for existing user', () => {
+const dbMock = [];
+
+const Users = new UserModel(dbMock);
+
+async function testUserExistsError() {
+  const existingUser = { password: 'password', username: 'existingUser' };
+  dbMock.push(existingUser);
+
+  it('should throw an error for existing user', async () => {
     try {
-      generate(existingUser.username, 'newPassword');
+      await Users.create(existingUser.username, 'newPassword');
       assert.fail('An error should be thrown for existing user.');
     } catch (error) {
       assert.strictEqual(error.message, 'User already exists');
@@ -17,15 +21,15 @@ function testUserExistsError() {
   });
 }
 
-function testAddNewUser() {
+async function testAddNewUser() {
   const username = 'newUser';
   const password = 'password';
-  
-  it('should add a new user to the database', () => {
-    generate(username, password);
-    const newUser = db.find((user) => user.username === username);
+
+  it('should add a new user to the database', async () => {
+    await Users.create(username, password);
+    const newUser = dbMock.find((user) => user.username === username);
     assert.ok(newUser);
-    assert.deepStrictEqual(newUser, { username, password });
+    assert.deepStrictEqual(newUser, { password, username });
   });
 }
 

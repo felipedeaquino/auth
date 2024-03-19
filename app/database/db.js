@@ -1,6 +1,8 @@
-const DB = [{
-  username: 'test',
-  password: 'batman123'
-}];
+const DB = [
+  {
+    password: 'batman123',
+    username: 'test',
+  },
+];
 
 export default DB;

@@ -1,0 +1,31 @@
+---
+extends:
+  - eslint:recommended
+  - plugin:import/recommended
+  - plugin:perfectionist/recommended-alphabetical
+
+plugins:
+  - import
+  - perfectionist
+
+rules:
+  import/named: 2
+  import/namespace: 2
+  import/default: 2
+  import/export: 2
+  perfectionist/sort-classes:
+    - error
+    - type: 'natural'
+      order: 'asc'
+      groups:
+        - 'index-signature'
+        - 'static-property'
+        - 'private-property'
+        - 'property'
+        - 'constructor'
+        - 'static-method'
+        - 'private-method'
+        - 'method'
+
+globals:
+  process: 'readonly'
