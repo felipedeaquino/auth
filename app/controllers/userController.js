@@ -23,12 +23,13 @@ export async function create(req, res) {
   return res.status(201).send('User successfully registered.');
 }
 
+export function list(req, res) {
+  const db = this.getAll();
+  res.status(200).send(db);
+}
+
 export async function login(req, res) {
   const { password, username } = req.body;
-
-  if (!username || !password) {
-    return res.status(400).send('All fields must be filled out.');
-  }
 
   const user = await Users.findByUsername(username);
   if (!user || user.password !== password) {
@@ -36,9 +37,4 @@ export async function login(req, res) {
   }
 
   return res.status(204).send('');
-}
-
-export function list(req, res) {
-  const db = this.getAll();
-  res.status(200).send(db);
 }
