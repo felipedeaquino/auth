@@ -15,7 +15,7 @@ export async function create(req, res) {
   }
 
   try {
-    await Users.create(username, password);
+    await Users.create({ password, username });
   } catch (error) {
     return res.status(403).send(error.message);
   }

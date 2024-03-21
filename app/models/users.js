@@ -10,7 +10,7 @@ export class UserModel {
     }
   }
 
-  async create(password, username) {
+  async create({ password, username }) {
     const found = await this.findByUsername(username);
 
     if (found) {
