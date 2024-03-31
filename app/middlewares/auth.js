@@ -1,5 +1,5 @@
 import { compactVerify as decode } from 'jose';
-import { TextEncoder } from 'util';
+import { TextDecoder,TextEncoder } from 'util';
 
 const secretKey = new TextEncoder().encode(process.env.SECRET_KEY);
 
@@ -16,7 +16,15 @@ export async function verifyToken(req, res, next) {
   const token = authHeader.replace('Bearer', '').trim();
   if (!token) return res.status(401).json({ error: 'Access denied' });
   try {
-    await decode(token, secretKey)
+    const { payload } = await decode(token, secretKey)
+    const payloadString = new TextDecoder().decode(payload);
+    const payloadObject = JSON.parse(payloadString);
+
+    const currentTime = Math.floor(Date.now() / 1000);
+    if (payloadObject.exp < currentTime) {
+      return res.status(401).json({ error: 'Token expired' });
+    }
+
     next();
   } catch (error) {
     res.status(401).json({ error: 'Invalid token' });
