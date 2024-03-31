@@ -7,6 +7,18 @@ const dbMock = [];
 
 const Users = new UserModel(dbMock);
 
+async function testAddNewUser() {
+  const username = 'newUser';
+  const password = 'password';
+
+  it('should add a new user to the database', async () => {
+    await Users.create({ password, username });
+    const newUser = dbMock.find((user) => user.username === username);
+    assert.ok(newUser);
+    assert.deepStrictEqual(newUser, { password, username });
+  });
+}
+
 async function testUserExistsError() {
   const existingUser = { password: 'password', username: 'existingUser' };
   dbMock.push(existingUser);
@@ -21,19 +33,7 @@ async function testUserExistsError() {
   });
 }
 
-async function testAddNewUser() {
-  const username = 'newUser';
-  const password = 'password';
-
-  it('should add a new user to the database', async () => {
-    await Users.create({ password, username });
-    const newUser = dbMock.find((user) => user.username === username);
-    assert.ok(newUser);
-    assert.deepStrictEqual(newUser, { password, username });
-  });
-}
-
 describe('User Model Tests', () => {
-  testUserExistsError();
   testAddNewUser();
+  testUserExistsError();
 });

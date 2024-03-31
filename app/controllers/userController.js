@@ -3,6 +3,13 @@ import { UserModel } from '../models/users.js';
 
 const Users = new UserModel(db);
 
+/**
+ * Controller function to create a new user.
+ * @param {import('express').Request} req - O objeto de solicitação Express.
+ * @param {import('express').Response} res - O objeto de resposta Express.
+ * @returns {Promise<string>} A promise that resolves with a message if the user is created.
+ * @throws throws an error if validation fails, the user already exists, passwords do not match or the request is missing required fields.
+ */
 export async function create(req, res) {
   const { password, username, validationPassword } = req.body;
 
@@ -23,18 +30,32 @@ export async function create(req, res) {
   return res.status(201).send('User successfully registered.');
 }
 
-export function list(req, res) {
-  const db = this.getAll();
-  res.status(200).send(db);
+/**
+ * Controller function to get a list of all users.
+ * @param {import('express').Request} req - O objeto de solicitação Express.
+ * @param {import('express').Response} res - O objeto de resposta Express.
+ * @returns {Promise<Array<{username: string, password: string }>>} A promise that resolves with an array of all users or an empty array if there are no users.
+ */
+export async function list(req, res) {
+  const users = await Users.getAll();
+  res.status(200).send(users);
 }
 
+/**
+ * Controller function to authenticate a user.
+ * @param {import('express').Request} req - O objeto de solicitação Express.
+ * @param {import('express').Response} res - O objeto de resposta Express.
+ * @returns {Promise<string>} A promise that resolves with a JSON Web Token (JWT) if authentication is successful.
+ * @throws an error if authentication fails.
+ */
 export async function login(req, res) {
   const { password, username } = req.body;
 
-  const user = await Users.findByUsername(username);
+  const user = await Users.findByUsername({ username });
   if (!user || user.password !== password) {
-    return res.status(401).send('Incorrect username or password.');
+    return res.status(401).send('Unauthorized.');
   }
 
-  return res.status(204).send('');
+  const token = await Users.auth({ user });
+  return res.status(200).send(token);
 }
