@@ -5,8 +5,8 @@ const Users = new UserModel(db);
 
 /**
  * Controller function to create a new user.
- * @param {import('express').Request} req - O objeto de solicitação Express.
- * @param {import('express').Response} res - O objeto de resposta Express.
+ * @param {import('express').Request} req - Express request object.
+ * @param {import('express').Response} res - Express response object.
  * @returns {Promise<string>} A promise that resolves with a message if the user is created.
  * @throws throws an error if validation fails, the user already exists, passwords do not match or the request is missing required fields.
  */
@@ -32,8 +32,8 @@ export async function create(req, res) {
 
 /**
  * Controller function to get a list of all users.
- * @param {import('express').Request} req - O objeto de solicitação Express.
- * @param {import('express').Response} res - O objeto de resposta Express.
+ * @param {import('express').Request} req - Express request object.
+ * @param {import('express').Response} res - Express response object.
  * @returns {Promise<Array<{username: string, password: string }>>} A promise that resolves with an array of all users or an empty array if there are no users.
  */
 export async function list(req, res) {
@@ -43,19 +43,15 @@ export async function list(req, res) {
 
 /**
  * Controller function to authenticate a user.
- * @param {import('express').Request} req - O objeto de solicitação Express.
- * @param {import('express').Response} res - O objeto de resposta Express.
+ * @param {import('express').Request} req - Express request object.
+ * @param {import('express').Response} res - Express response object.
  * @returns {Promise<string>} A promise that resolves with a JSON Web Token (JWT) if authentication is successful.
  * @throws an error if authentication fails.
  */
 export async function login(req, res) {
   const { password, username } = req.body;
+  
+  const payload = await Users.login({ password, username })
 
-  const user = await Users.findByUsername({ username });
-  if (!user || user.password !== password) {
-    return res.status(401).send('Unauthorized.');
-  }
-
-  const token = await Users.auth({ user });
-  return res.status(200).send(token);
+  return res.status(payload.status).send(payload.send);
 }

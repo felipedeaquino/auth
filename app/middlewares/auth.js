@@ -6,8 +6,8 @@ const secretKey = new TextEncoder().encode(process.env.SECRET_KEY);
   /**
    * Middleware function to authenticate a user.
    * @async
-   * @param {import('express').Request} req - O objeto de solicitação Express.
-   * @param {import('express').Response} res - O objeto de resposta Express.
+   * @param {import('express').Request} req - Express request object.
+   * @param {import('express').Response} res - Express response object.
    * @param {import('express').NextFunction} next - The next middleware function in the application's request-response cycle.
    * @returns {Promise<string>} A promise that resolves with a JSON Web Token (JWT) if authentication is successful
    */

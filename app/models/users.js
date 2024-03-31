@@ -30,7 +30,7 @@ export class UserModel {
     .setIssuedAt()
     .setExpirationTime('15min')
     .sign(secretKey);
-  return token;
+    return token;
   }
 
   /**
@@ -70,5 +70,25 @@ export class UserModel {
    */
   async getAll() {
     return await this.db;
+  }
+
+  async login({ password, username }) {
+    let payload = {}
+    const user = await this.findByUsername({ username });
+
+    if (!user || user.password !== password) {
+      payload = {
+        send: 'Unauthorized.',
+        status: 401,
+      };
+      return payload;
+    }
+
+    const token = await this.auth({ user });
+    payload = {
+      send: token,
+      status: 200,
+    };
+    return payload;
   }
 }
